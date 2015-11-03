@@ -13,6 +13,7 @@ const credentials = require("./credentials.json");
 let wunderground;
 
 const testGeo = {
+    id: "1",
     latitude: "41.011454",
     longitude: "28.970974"
 };
@@ -61,16 +62,13 @@ describe("Wunderground Test", function () {
 
         it("should return forecast for given geolocation", function (done) {
 
-            wunderground.getForecast([{
-                latitude: "41.011454",
-                longitude: "28.970974"
-            }], (error, result) => {
+            wunderground.getForecast([testGeo], (error, result) => {
 
                 expect(error).to.not.exist;
                 expect(result).to.exist;
                 expect(result).to.have.length(1);
-                expect(result[0]).to.have.all.keys(["response", "hourly_forecast"]);
-                expect(result[0]["hourly_forecast"]).to.have.length(36);
+                expect(result[0]).to.have.any.keys(testGeo.id);
+                expect(result[0][testGeo.id]["hourly_forecast"]).to.have.length(36);
                 done();
             });
         });

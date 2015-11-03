@@ -1,6 +1,6 @@
 {
   "name": "mechanic-wunderground",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Mechanic - wunderground api client",
   "main": "index.js",
   "scripts": {
