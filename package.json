@@ -1,7 +1,7 @@
 {
-  "name": "mechanic-wunderground",
-  "version": "0.1.6",
-  "description": "Mechanic - wunderground api client",
+  "name": "mechanic-weather",
+  "version": "0.2.0",
+  "description": "Mechanic - weather api client",
   "main": "index.js",
   "scripts": {
     "test": "gulp test"

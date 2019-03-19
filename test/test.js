@@ -5,12 +5,12 @@
 
 "use strict";
 
-const Wunderground = require("../");
+const Weather = require("../");
 
 const expect = require("chai").expect;
 const credentials = require("./credentials.json");
 
-let wunderground;
+let weather;
 
 const testGeo = {
     id: "1",
@@ -18,13 +18,13 @@ const testGeo = {
     longitude: "28.970974"
 };
 
-describe("Wunderground Test", function () {
+describe("Weather Test", function () {
 
     describe("Not Valid Parameters", function () {
 
         it("should fail with no credentials", function () {
             expect(function () {
-                new Wunderground();
+                new Weather();
             }).to.throw(Error);
         });
     });
@@ -33,7 +33,7 @@ describe("Wunderground Test", function () {
 
         before(function (done) {
             try {
-                wunderground = new Wunderground(credentials.apiKey);
+                weather = new Weather(credentials.apiKey);
                 done();
             }
             catch (error) {
@@ -43,7 +43,7 @@ describe("Wunderground Test", function () {
 
         it("should return error for empty list", function (done) {
 
-            wunderground.getForecast([], (error, result) => {
+            weather.getForecast([], (error, result) => {
                 expect(error).to.exist;
                 done();
             });
@@ -51,25 +51,26 @@ describe("Wunderground Test", function () {
 
         it("should return error for incorrect geolocation", function (done) {
 
-            wunderground.getForecast([{
+            weather.getForecast([{
                 latitude: "x",
                 longitude: "y"
             }], (error, result) => {
-                expect(error).to.exist;
+                expect(error).to.not.exist;
+                expect(result).to.have.length(0);
                 done();
             });
         });
 
         it("should return forecast for given geolocation", function (done) {
 
-            wunderground.getForecast([testGeo], (error, result) => {
+            weather.getForecast([testGeo], (error, result) => {
 
                 expect(error).to.not.exist;
                 expect(result).to.exist;
                 expect(result).to.have.length(1);
                 expect(result[0]).to.have.any.keys("id");
                 expect(result[0]["id"]).to.equal(testGeo.id);
-                expect(result[0]["result"]["hourly_forecast"]).to.have.length(36);
+                expect(result[0]["hourly"]).to.not.be.empty;
                 done();
             });
         });
@@ -79,7 +80,7 @@ describe("Wunderground Test", function () {
 
         before(function (done) {
             try {
-                wunderground = new Wunderground(credentials.apiKey, 1, 10000);
+                weather = new Weather(credentials.apiKey, 1, 10000);
                 done();
             }
             catch (error) {
@@ -89,14 +90,14 @@ describe("Wunderground Test", function () {
 
         it("should return forecast IMMEDIATELY for given geolocation at first trial", function (done) {
 
-            wunderground.getForecast([testGeo], (error, result) => {
+            weather.getForecast([testGeo], (error, result) => {
 
                 expect(error).to.not.exist;
                 expect(result).to.exist;
                 expect(result).to.have.length(1);
                 expect(result[0]).to.have.any.keys("id");
                 expect(result[0]["id"]).to.equal(testGeo.id);
-                expect(result[0]["result"]["hourly_forecast"]).to.have.length(36);
+                expect(result[0]["hourly"]).to.not.be.empty;
                 done();
             });
         });
@@ -106,14 +107,14 @@ describe("Wunderground Test", function () {
             this.timeout(20000);
             const now = Date.now();
 
-            wunderground.getForecast([testGeo], (error, result) => {
+            weather.getForecast([testGeo], (error, result) => {
 
                 expect(error).to.not.exist;
                 expect(result).to.exist;
                 expect(result).to.have.length(1);
                 expect(result[0]).to.have.any.keys("id");
                 expect(result[0]["id"]).to.equal(testGeo.id);
-                expect(result[0]["result"]["hourly_forecast"]).to.have.length(36);
+                expect(result[0]["hourly"]).to.not.be.empty;
 
                 const timeElapsed = Date.now() - now;
                 // time elapsed should be above 9 seconds
