@@ -1,22 +1,33 @@
 
 ````javascript
 
-var MechanicSms = require("mechanic-sms");
+var MechanicWeather = require("mechanic-weather");
 
-// initialize mechanic-sms
-var mechanicSms = new MechanicSms("{SENDER_ALIAS}", "{PROVIDER}", credentials);
+// initialize mechanic-weather
+var mechanicWeather = new MechanicWeather({apiKey: "{apiKey}"}, rateLimit, rateTime);
 
 // fire it up
-mechanicSms.sendSMS([{NUMBERS}], "{TEXT}")
-	.then(function (results) {
-		// {
-		//		[
-		//			status: "success|error",
-		//			message: "messageid|error_text"
-		//		]
-		// }
-	})
-	.catch(function(error) {
-		done(error);
+mechanicWeather.getForecast([
+    {
+        id: "{some unique id}",
+        latitude: "{latitude}",
+        longitude: "{longitude}"
+    },
+    // ...
+    ], (error, results) => {
+	    // [
+	    //    {
+	    //        id: "{id}",
+	    //        hourly: [
+	    //            // ...
+	    //        ]
+	    //    },
+	    //    {
+        //        id: "{id}",
+        //        hourly: [
+        //            // ...
+        //        ]
+        //    },
+	    //]
 	});
 ````
