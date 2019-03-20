@@ -1,6 +1,6 @@
 {
   "name": "mechanic-weather",
-  "version": "0.2.1",
+  "version": "0.2.1.1",
   "description": "Mechanic - weather api client",
   "main": "index.js",
   "scripts": {
